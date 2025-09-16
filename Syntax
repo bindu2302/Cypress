@@ -1,0 +1,185 @@
+Cypress Syntax Overview
+-------------------------------------------------------
+1. Test Structure
+
+Cypress tests use Mocha syntax (describe, it, before, after, etc.).
+
+describe('Test Suite Name', () => {
+  
+  before(() => {
+    // runs once before all tests
+  });
+
+  beforeEach(() => {
+    // runs before each test
+  });
+
+  it('Test Case 1', () => {
+    // test steps here
+  });
+
+  it('Test Case 2', () => {
+    // test steps here
+  });
+
+  afterEach(() => {
+    // runs after each test
+  });
+
+  after(() => {
+    // runs once after all tests
+  });
+
+});
+
+2. Visit a Page
+cy.visit('https://example.com');
+
+3. Get Elements
+cy.get('#username');       // by ID
+cy.get('.btn-primary');    // by Class
+cy.get('input[name="email"]'); // by Attribute
+
+4. Type into Input
+cy.get('#username').type('testuser');
+cy.get('#password').type('Password123{enter}'); // {enter} simulates Enter key
+
+5. Click Buttons/Links
+cy.get('button[type="submit"]').click();
+
+6. Assertions (Should/Expect)
+cy.url().should('include', '/dashboard');
+cy.get('.success-msg').should('be.visible');
+cy.get('#username').should('have.value', 'testuser');
+
+7. Custom Waits (Avoid Hard Waits)
+cy.wait(2000); // not recommended unless needed
+cy.get('.loader').should('not.exist'); // better option
+
+8. API Requests
+cy.request('GET', '/api/users').then((response) => {
+  expect(response.status).to.eq(200);
+  expect(response.body).to.have.length.greaterThan(0);
+});
+
+9. Fixture (Test Data)
+before(() => {
+  cy.fixture('userdata.json').then((data) => {
+    this.user = data;
+  });
+});
+
+it('Login using fixture data', function() {
+  cy.get('#username').type(this.user.username);
+  cy.get('#password').type(this.user.password);
+});
+
+10. Commands (Custom Reusable Functions)
+Cypress.Commands.add('login', (user, pass) => {
+  cy.get('#username').type(user);
+  cy.get('#password').type(pass);
+  cy.get('button[type="submit"]').click();
+});
+
+// Usage
+cy.login('testuser', 'Password123');
+
+
+✅ In simple terms:
+----------------------------------------
+
+describe() → Groups test cases.
+it() → Defines a single test case.
+cy.get() → Finds elements.
+cy.type(), cy.click() → Performs actions.
+cy.should() → Makes assertions.
+
+
+1. describe()
+
+Used to group test cases into a test suite.
+
+You can think of it like a container for related tests.
+
+Improves readability and structure.
+
+✅ Example:
+
+describe('Login Module', () => {
+  it('Valid login', () => {});
+  it('Invalid login', () => {});
+});
+
+2. it()
+
+Defines a single test case inside a test suite.
+
+Each it() block should represent one test scenario.
+
+✅ Example:
+
+it('should allow user to login with valid credentials', () => {
+  cy.visit('/login');
+  cy.get('#username').type('testuser');
+  cy.get('#password').type('Password123');
+  cy.get('button[type="submit"]').click();
+  cy.url().should('include', '/dashboard');
+});
+
+3. before()
+
+Runs once before all test cases in the suite.
+
+Useful for setup tasks (e.g., open app, load test data).
+
+✅ Example:
+
+before(() => {
+  cy.log('Runs once before all tests');
+});
+
+4. after()
+
+Runs once after all test cases in the suite.
+
+Useful for cleanup tasks (e.g., clear test data, logout).
+
+✅ Example:
+
+after(() => {
+  cy.log('Runs once after all tests');
+});
+
+5. beforeEach()
+
+Runs before every individual test (it).
+
+Good for resetting state or navigating to the base URL before each test.
+
+✅ Example:
+
+beforeEach(() => {
+  cy.visit('/login');
+});
+
+6. afterEach()
+
+Runs after every individual test (it).
+
+Useful for cleanup per test (e.g., logging out, clearing cookies).
+
+✅ Example:
+
+afterEach(() => {
+  cy.clearCookies();
+});
+
+🔑 In short:
+-------------------------
+
+describe → Groups tests (suite).
+it → Single test (case).
+before → Runs once before all tests.
+after → Runs once after all tests.
+beforeEach → Runs before each test.
+afterEach → Runs after each test.
