@@ -1,0 +1,101 @@
+What is Cypress?
+-------------------------------
+
+Cypress is a modern end-to-end testing framework built for web applications.
+It is JavaScript-based and runs directly in the browser, allowing developers and QA engineers to write, run, and debug tests quickly.
+It’s mainly used for UI testing, integration testing, and API testing in frontend applications.
+
+Advantages of Cypress
+-------------------------------
+
+Fast execution – Tests run directly inside the browser without needing Selenium/WebDriver.
+
+Real-time reloading – Tests automatically re-run when code changes, making development faster.
+
+Easy setup – No extra drivers or dependencies; install via npm install cypress.
+
+Automatic waiting – Cypress waits for elements to appear, eliminating the need for manual waits.
+
+Time travel debugging – Cypress takes snapshots at every step; you can see exactly what happened.
+
+Rich API support – Can test UI and API in the same framework.
+
+Built-in parallelization and retries – Supports scaling tests across multiple machines.
+
+Good documentation and community support.
+
+Disadvantages of Cypress
+----------------------------------------------
+
+Limited to JavaScript/TypeScript – Cannot be used with other programming languages.
+
+Runs only in browsers – Not suitable for testing native mobile apps.
+
+Limited multi-tab/window support – Struggles with applications requiring multiple browser windows.
+
+Cross-browser support is improving – Initially supported only Chrome, later added Firefox and Edge, but Safari and IE are limited.
+
+No direct support for remote execution like Selenium Grid (though workarounds exist).
+
+Heavy memory usage – Running large test suites can be resource-intensive.
+
+Why we use Cypress?
+----------------------------------
+
+To automate testing of frontend applications.
+
+To ensure UI and API work correctly together.
+
+To reduce manual testing effort.
+
+To provide fast feedback in CI/CD pipelines.
+
+To test modern single-page applications (SPA) like React, Angular, Vue, etc.
+
+Use Cases / Examples
+------------------------------------------------------------------
+
+UI Testing (End-to-End)
+
+Example: Verify that a user can log in with valid credentials and is redirected to the dashboard.
+
+it('Login test', () => {
+  cy.visit('/login');
+  cy.get('#username').type('testuser');
+  cy.get('#password').type('Password123');
+  cy.get('button[type="submit"]').click();
+  cy.url().should('include', '/dashboard');
+});
+
+
+Form Validation
+
+Example: Check if proper error messages appear when submitting empty fields.
+
+API Testing
+
+Example: Validate if GET /users API returns a 200 status and correct data.
+
+it('API Test', () => {
+  cy.request('/api/users').then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body).to.have.length.greaterThan(0);
+  });
+});
+
+
+Cross-browser Testing
+
+Run the same test in Chrome, Edge, and Firefox.
+
+CI/CD Integration
+
+Run automated regression tests on every code push (e.g., in GitHub Actions, Jenkins, GitLab CI).
+
+Visual Regression Testing (with plugins)
+
+Compare UI screenshots before and after code changes.
+
+E-commerce Testing
+
+Example: Add item to cart → Checkout → Verify order confirmation page.
